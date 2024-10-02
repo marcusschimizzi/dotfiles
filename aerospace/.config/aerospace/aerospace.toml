@@ -103,6 +103,9 @@ alt-shift-j = 'move down'
 alt-shift-k = 'move up'
 alt-shift-l = 'move right'
 
+alt-shift-right = 'workspace --wrap-around next'
+alt-shift-left = 'workspace --wrap-around prev'
+
 # See: https://nikitabobko.github.io/AeroSpace/commands#resize
 alt-shift-minus = 'resize smart -50'
 alt-shift-equal = 'resize smart +50'
@@ -197,3 +200,6 @@ alt-shift-j = ['join-with down', 'mode main']
 alt-shift-k = ['join-with up', 'mode main']
 alt-shift-l = ['join-with right', 'mode main']
 
+[[on-window-detected]]
+if.app-id = "ch.protonvpn.mac"
+run = ['layout floating']
