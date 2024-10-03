@@ -203,3 +203,19 @@ alt-shift-l = ['join-with right', 'mode main']
 [[on-window-detected]]
 if.app-id = "ch.protonvpn.mac"
 run = ['layout floating']
+
+[[on-window-detected]]
+if.app-id = "ludeon.rimworld"
+run = ['move-node-to-workspace G']
+
+[[on-window-detected]]
+if.app-id = 'md.obsidian'
+run = ['move-node-to-workspace N']
+
+[[on-window-detected]]
+if.app-id = 'com.apple.podcasts'
+run = ['move-node-to-workspace M']
+
+[[on-window-detected]]
+if.app-id = 'com.spotify.client'
+run = ['move-node-to-workspace M']
