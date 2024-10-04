@@ -219,3 +219,8 @@ run = ['move-node-to-workspace M']
 [[on-window-detected]]
 if.app-id = 'com.spotify.client'
 run = ['move-node-to-workspace M']
+
+
+[workspace-to-monitor-force-assignment]
+8 = 'built-in'
+9 = 'built-in'
