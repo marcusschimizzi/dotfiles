@@ -9,21 +9,34 @@
   "spacing": 15,
   "margin-top": 0,
   "margin-bottom": 0,
-  "margin-left": 120,
-  "margin-right": 120,
+  "margin-left": 10,
+  "margin-right": 10,
+  "output": "DP-1",
 	"modules-left": [
+    "custom/launcher",
 		"clock",
-		"hyprland/workspaces"
+		"clock#date",
+    "custom/spotify"
 	],
-	"modules-center": ["hyprland/window"],
+	"modules-center": [
+    "hyprland/workspaces"
+  ],
 	"modules-right": [
 		"tray",
 		"memory",
 		"cpu",
 		"network",
 		"pulseaudio",
-		"pulseaudio#microphone"
+		"pulseaudio#microphone",
+    "custom/powermenu"
 	],
+
+  "custom/launcher": {
+    "interval": "once",
+    "format": "󰣇",
+    "on-click": "pkill wofi || wofi --show drun --term=kitty --width=20% --height=50% --columns 1 -I -s ~/.config/wofi/themes/default.css -o $MAIN_DISPLAY",
+    "tooltip": "false"
+  },
 
 	"hyprland/window": {
 		"format": "󰣇  {}"
@@ -32,7 +45,9 @@
 	"hyprland/workspaces": {
 		"disable-scroll": true,
 		"all-outputs": true,
-		"on-click": "activate"
+		"on-click": "activate",
+    "on-scroll-up": "hyprctl dispatch workspace e+1",
+    "on-scroll-down": "hyprctl dispatch workspace e-1",
 	},
 
   "tray": {
@@ -41,9 +56,14 @@
   },
 
   "clock": {
-    "format": "{:%A    %B-%d-%Y    %I:%M:%S %p}",
+    "format": " {:%H:%M}",
     "interval": 1,
     "rotate": 0,
+    "tooltip": false
+  },
+
+  "clock#date": {
+    "format": " {:%A, %B %d, %Y}",
     "tooltip-format": "<tt>{calendar}</tt>",
     "calendar": {
       "mode": "month",
@@ -112,6 +132,13 @@
     "tooltip-format": "󰾆  {percentage}%\n  {used:0.1f}GB/{total:0.1f}GB"
   },
 
+  "custom/dunst": {
+    "exec": "~/.config/waybar/scripts/dunst.sh",
+    "on-click": "dunstctl set-paused toggle",
+    "restart-interval": 1,
+    "tooltip": false
+  },
+
   "network": {
     "tooltip": true,
     "format-wifi": "  {essid}",
@@ -122,5 +149,20 @@
     "tooltip-format-disconnected": "Disconnected",
     "format-alt": "<span foreground='#99ffdd'> {bandwidthDownBytes}</span> <span foreground='#ffcc66'> {bandwidthUpBytes}</span>",
     "interval": 2
+  },
+
+
+  "custom/powermenu": {
+    "format": "",
+    "on-click": "pkill wofi || sh .config/wofi/scripts/powermenu.sh '--height=17% -o $MAIN_DISPLAY'",
+    "tooltip": false
+  },
+
+  "custom/spotify": {
+    "format": " {}",
+    "max-length": 40,
+    "interval": 30,
+    "exec": "$HOME/.config/waybar/scripts/mediaplayer.sh 2> /dev/null",
+    "exec-if": "pgrep spotify"
   }
 }
