@@ -4,6 +4,10 @@ local icons = {
 	sf_symbols = {
 		loading = "􀖇",
 		apple = "􀣺",
+		switch = {
+			on = "􁏮",
+			off = "􁏯",
+		},
 		battery = {
 			_100 = "􀛨",
 			_75 = "􀺸",
@@ -20,6 +24,13 @@ local icons = {
 			router = "􁓤",
 			vpn = "􀒲",
 		},
+		volume = {
+			_100 = "􀊩",
+			_66 = "􀊧",
+			_33 = "􀊥",
+			_10 = "􀊡",
+			_0 = "􀊣",
+		},
 	},
 
 	nerdfont = {
@@ -30,6 +41,25 @@ local icons = {
 			connected = "󰖩",
 			disconnected = "󰖪",
 			router = "Missing Icon",
+		},
+		battery = {
+			_100 = "",
+			_75 = "",
+			_50 = "",
+			_25 = "",
+			_0 = "",
+			charging = "",
+		},
+		switch = {
+			on = "󱨥",
+			off = "󱨦",
+		},
+		volume = {
+			_100 = "",
+			_66 = "",
+			_33 = "",
+			_10 = "",
+			_0 = "",
 		},
 	},
 }
