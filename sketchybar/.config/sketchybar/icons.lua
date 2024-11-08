@@ -6,7 +6,7 @@ local icons = {
 		apple = "􀣺",
 		aerospace = "􀏝",
 		battery = {
-			_100 = "",
+			_100 = "􀛨",
 			_75 = "􀺸",
 			_50 = "􀺶",
 			_25 = "􀛩",
@@ -21,6 +21,13 @@ local icons = {
 			router = "􁓤",
 			vpn = "􀒲",
 		},
+		volume = {
+			_100 = "􀊩",
+			_66 = "􀊧",
+			_33 = "􀊥",
+			_10 = "􀊡",
+			_0 = "􀊣",
+		},
 		chevron = {
 			left = "􀆉",
 			right = "􀆊",
@@ -29,6 +36,7 @@ local icons = {
 			play = "􀊃",
 			pause = "􀊆",
 		},
+		cpu = "􀫥",
 	},
 
 	nerdfont = {
@@ -48,6 +56,13 @@ local icons = {
 			disconnected = "󰖪",
 			router = "Missing Icon",
 		},
+		volume = {
+			_100 = "",
+			_66 = "",
+			_33 = "",
+			_10 = "",
+			_0 = "",
+		},
 		aerospace = "",
 		chevron = {
 			left = "",
@@ -57,6 +72,7 @@ local icons = {
 			play = "",
 			pause = "",
 		},
+		cpu = "",
 	},
 }
 
