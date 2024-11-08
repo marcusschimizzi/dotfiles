@@ -4,16 +4,18 @@ local settings = require("settings")
 
 sbar.add("item", { width = 5 })
 
-local apple = sbar.add("item", {
+local apple = sbar.add("item", "apple", {
 	icon = {
 		font = { size = 16.0 },
 		string = icons.apple,
 		padding_right = 8,
 		padding_left = 8,
+		color = colors.white,
 	},
 	label = { drawing = false },
 	background = {
-		color = colors.transparent,
+		drawing = false,
+		color = colors.bg,
 		border_color = colors.black,
 		border_width = 1,
 	},
@@ -24,6 +26,7 @@ local apple = sbar.add("item", {
 
 sbar.add("bracket", { apple.name }, {
 	background = {
+		drawing = false,
 		color = colors.transparent,
 		height = 30,
 		border_color = colors.grey,
