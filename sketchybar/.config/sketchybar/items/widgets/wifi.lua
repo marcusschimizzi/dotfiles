@@ -30,6 +30,7 @@ local wifi_up = sbar.add("item", "widgets.wifi1", {
 		},
 		color = colors.red,
 		string = "??? Bps",
+		width = 0,
 	},
 	y_offset = 4,
 })
