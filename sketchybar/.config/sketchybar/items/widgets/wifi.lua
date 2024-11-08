@@ -12,7 +12,6 @@ local popup_width = 250
 
 local wifi_up = sbar.add("item", "widgets.wifi1", {
 	position = "right",
-	padding_left = -5,
 	width = 0,
 	icon = {
 		padding_right = 0,
@@ -21,6 +20,7 @@ local wifi_up = sbar.add("item", "widgets.wifi1", {
 			size = 9.0,
 		},
 		string = icons.wifi.upload,
+		width = 0,
 	},
 	label = {
 		font = {
@@ -44,6 +44,7 @@ local wifi_down = sbar.add("item", "widgets.wifi2", {
 			size = 9.0,
 		},
 		string = icons.wifi.download,
+		width = 0,
 	},
 	label = {
 		font = {
@@ -53,13 +54,17 @@ local wifi_down = sbar.add("item", "widgets.wifi2", {
 		},
 		color = colors.blue,
 		string = "??? Bps",
+		width = 0,
 	},
+	background = { drawing = false },
 	y_offset = -4,
 })
 
 local wifi = sbar.add("item", "widgets.wifi.padding", {
 	position = "right",
 	label = { drawing = false },
+	padding_left = 0,
+	padding_right = 0,
 })
 
 local wifi_bracket = sbar.add("bracket", "widgets.wifi.bracket", {
@@ -67,8 +72,8 @@ local wifi_bracket = sbar.add("bracket", "widgets.wifi.bracket", {
 	wifi_up.name,
 	wifi_down.name,
 }, {
-	background = { color = colors.black },
-	popup = { align = "center", height = 30 },
+	background = { color = colors.bg },
+	popup = { align = "center", height = 30, background = { corner_radius = 12 } },
 })
 
 local ssid = sbar.add("item", {
@@ -91,7 +96,7 @@ local ssid = sbar.add("item", {
 	},
 	background = {
 		height = 2,
-		color = colors.grey,
+		color = colors.fg_secondary,
 		y_offset = -15,
 	},
 })
@@ -152,11 +157,11 @@ local router = sbar.add("item", {
 	},
 })
 
-sbar.add("item", { position = "right", width = settings.group_padding })
+-- sbar.add("item", { position = "right", width = settings.group_padding })
 
 wifi_up:subscribe("network_update", function(env)
-	local up_color = (env.upload == "000 Bps") and colors.grey or colors.red
-	local down_color = (env.download == "000 Bps") and colors.grey or colors.blue
+	local up_color = (env.upload == "000 Bps") and colors.fg_secondary or colors.red
+	local down_color = (env.download == "000 Bps") and colors.fg_secondary or colors.blue
 	wifi_up:set({
 		icon = { color = up_color },
 		label = {
@@ -179,7 +184,7 @@ wifi:subscribe({ "wifi_change", "system_woke" }, function(env)
 		wifi:set({
 			icon = {
 				string = connected and icons.wifi.connected or icons.wifi.disconnected,
-				color = connected and colors.white or colors.red,
+				color = connected and colors.fg or colors.red,
 			},
 		})
 	end)
@@ -189,7 +194,7 @@ wifi:subscribe({ "wifi_change", "system_woke" }, function(env)
 			wifi:set({
 				icon = {
 					string = icons.wifi.vpn,
-					color = colors.white,
+					color = colors.fg,
 				},
 			})
 		end
@@ -198,6 +203,29 @@ end)
 
 local function hide_details()
 	wifi_bracket:set({ popup = { drawing = false } })
+	sbar.animate("tanh", 30, function()
+		wifi_up:set({
+			icon = { width = 0 },
+			label = { width = 0 },
+		})
+		wifi_down:set({
+			icon = { width = 0 },
+			label = { width = 0 },
+		})
+	end)
+end
+
+local function show_details()
+	sbar.animate("tanh", 30, function()
+		wifi_up:set({
+			icon = { width = "dynamic" },
+			label = { width = "dynamic" },
+		})
+		wifi_down:set({
+			icon = { width = "dynamic" },
+			label = { width = "dynamic" },
+		})
+	end)
 end
 
 local function toggle_details()
@@ -224,6 +252,7 @@ local function toggle_details()
 	end
 end
 
+wifi:subscribe("mouse.entered", show_details)
 wifi_up:subscribe("mouse.clicked", toggle_details)
 wifi_down:subscribe("mouse.clicked", toggle_details)
 wifi:subscribe("mouse.clicked", toggle_details)

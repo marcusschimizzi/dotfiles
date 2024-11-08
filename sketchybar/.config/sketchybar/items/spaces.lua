@@ -3,89 +3,208 @@ local icons = require("icons")
 local settings = require("settings")
 local app_icons = require("helpers.app_icons")
 
-local item_order = ""
+local max_workspaces = 16
+local focused_workspace_index = nil
+local is_show_windows = true
 
-sbar.exec("aerospace list-workspaces --all", function(spaces)
-	for space_name in spaces:gmatch("[^\r\n]+") do
-		local space = sbar.add("item", "space." .. space_name, {
-			icon = {
-				font = { family = settings.font.numbers },
-				string = string.find(space_name, "_") and string.sub(space_name, 3) or space_name,
-				padding_left = 7,
-				padding_right = 3,
-				color = colors.white,
-				highlight_color = colors.red,
-			},
+local toggle_windows = sbar.add("item", {
+	icon = {
+		string = icons.aerospace,
+		padding_right = 8,
+	},
+	label = {
+		width = 0,
+		y_offset = 0.5,
+		padding_right = 15,
+	},
+	background = {
+		color = colors.with_alpha(colors.bg, 0),
+		border_color = colors.fg_highlight,
+	},
+	padding_right = 0,
+})
+
+toggle_windows:subscribe("mouse.entered", function()
+	sbar.animate("tanh", 10, function()
+		toggle_windows:set({
 			label = {
-				padding_right = 12,
-				color = colors.grey,
-				highlight_color = colors.white,
-				font = "sketchybar-app-font:Regular:16.0",
-				y_offset = -1,
+				string = is_show_windows and icons.chevron.left or icons.chevron.right,
+				width = "dynamic",
 			},
-			padding_right = 1,
-			padding_left = 1,
 			background = {
-				color = colors.transparent,
-				border_width = 1,
-				height = 26,
-				border_color = colors.white,
+				color = colors.with_alpha(colors.bg, 1),
+				border_width = 2,
 			},
 		})
+	end)
+end)
 
-		local space_bracket = sbar.add("bracket", { space.name }, {
+toggle_windows:subscribe("mouse.exited", function()
+	sbar.animate("tanh", 10, function()
+		toggle_windows:set({
+			label = {
+				width = 0,
+			},
 			background = {
-				color = colors.transparent,
-				border_color = colors.white,
-				height = 28,
-				border_width = 1,
+				color = colors.with_alpha(colors.bg, 0),
+				border_width = 2,
 			},
 		})
+	end)
+end)
 
-		-- Padding space
-		local space_padding = sbar.add("item", "space.padding." .. space_name, {
-			script = "",
-			width = settings.group_paddings,
-		})
+local workspaces = {}
 
-		space:subscribe("aerospace_workspace_change", function(env)
-			local selected = env.FOCUSED_WORKSPACE == space_name
-			local color = selected and colors.grey or colors.yellow
-			space:set({
-				icon = { highlight = selected },
-				label = { highlight = selected },
-				background = { border_color = selected and colors.black or colors.yellow },
-			})
-			space_bracket:set({
-				background = { border_color = selected and colors.grey or colors.yellow },
-			})
-		end)
+local function updateWindows(workspace_index)
+	local get_windows = "aerospace list-windows --format %{app-name} --json --workspace " .. workspace_index
 
-		space:subscribe("mouse.clicked", function()
-			sbar.exec("aerospace workspace " .. space_name)
-		end)
+	sbar.exec(get_windows, function(open_windows)
+		local icon_line = ""
+		local no_app = true
 
-		space:subscribe("space_windows_change", function()
-			sbar.exec("aerospace list-windows --format %{app-name} --workspace " .. space_name, function(windows)
-				local no_app = true
-				local icon_line = ""
-				for app in windows:gmatch("[^\r\n]+") do
-					no_app = false
-					local lookup = app_icons[app]
-					local icon = ((lookup == nil) and app_icons["default"] or lookup)
-					icon_line = icon_line .. " " .. icon
+		for i, open_window in ipairs(open_windows) do
+			no_app = false
+			local app = open_window["app-name"]
+			local lookup = app_icons[app]
+			local icon = ((lookup == nil) and app_icons["default"] or lookup)
+			icon_line = icon_line .. " " .. icon
+		end
+
+		sbar.animate("tanh", 10, function()
+			if no_app then
+				if workspace_index == focused_workspace_index then
+					icon_line = " -"
+					workspaces[workspace_index]:set({
+						icon = { drawing = true },
+						label = { drawing = true, string = icon_line },
+						background = { drawing = true },
+						padding_right = 1,
+						padding_left = 4,
+					})
+					return
 				end
 
-				if no_app then
-					icon_line = " —"
-				end
-				sbar.animate("tanh", 10, function()
-					space:set({ label = icon_line })
-				end)
-			end)
-		end)
+				-- Hide empty unfocused workspaces
+				workspaces[workspace_index]:set({
+					icon = { drawing = false },
+					label = { drawing = false },
+					background = { drawing = false },
+					padding_right = 0,
+					padding_left = 0,
+				})
+				return
+			end
 
-		item_order = item_order .. " " .. space.name .. " " .. space_padding.name
-	end
-	sbar.exec("sketchybar --reorder apple " .. item_order .. " front_app")
+			workspaces[workspace_index]:set({
+				icon = { drawing = true },
+				label = { drawing = true, string = icon_line },
+				background = { drawing = true },
+				padding_right = 1,
+				padding_left = 4,
+			})
+		end)
+	end)
+end
+
+for workspace_index = 1, max_workspaces do
+	local workspace = sbar.add("item", "space." .. workspace_index, {
+		icon = {
+			font = { family = settings.font.numbers },
+			color = colors.fg2,
+			string = workspace_index,
+			padding_left = 15,
+			padding_right = 8,
+			highlight_color = colors.fg,
+		},
+		label = {
+			padding_right = 20,
+			color = colors.fg_secondary,
+			highlight_color = colors.fg,
+			font = "sketchybar-app-font:Regular:16.0",
+			y_offset = -1,
+		},
+		padding_right = 1,
+		padding_left = 4,
+		background = {
+			border_color = colors.fg_highlight,
+		},
+	})
+
+	workspaces[workspace_index] = workspace
+
+	workspace:subscribe("aerospace_workspace_change", function(env)
+		focused_workspace_index = tonumber(env.FOCUSED_WORKSPACE)
+		local is_focused = focused_workspace_index == workspace_index
+
+		sbar.animate("tanh", 10, function()
+			workspace:set({
+				icon = { highlight = is_focused },
+				label = { highlight = is_focused },
+				background = {
+					border_width = is_focused and 2 or 0,
+				},
+			})
+		end)
+	end)
+
+	workspace:subscribe("aerospace_focus_change", function()
+		updateWindows(workspace_index)
+	end)
+
+	-- Enable click to switch workspace
+	workspace:subscribe("mouse.clicked", function()
+		local focus_workspace = "aerospace workspace " .. workspace_index
+		sbar.exec(focus_workspace)
+	end)
+
+	workspace:subscribe("mouse.entered", function()
+		sbar.animate("tanh", 10, function()
+			workspace:set({
+				icon = { highlight = true },
+				label = { highlight = true },
+				background = { border_width = 2 },
+			})
+		end)
+	end)
+
+	workspace:subscribe("mouse.exited", function()
+		-- Do not change highlight if this workspace is focused
+		if workspace_index == focused_workspace_index then
+			return
+		end
+
+		sbar.animate("tanh", 10, function()
+			workspace:set({
+				icon = { highlight = false },
+				label = { highlight = false },
+				background = { border_width = 0 },
+			})
+		end)
+	end)
+
+	updateWindows(workspace_index)
+	sbar.exec("aerospace list-workspaces --focused", function(focused_workspace)
+		workspaces[tonumber(focused_workspace)]:set({
+			icon = { highlight = true },
+			label = { highlight = true },
+			background = { border_width = 2 },
+		})
+	end)
+end
+
+toggle_windows:subscribe("mouse.clicked", function()
+	is_show_windows = not is_show_windows
+	sbar.animate("tanh", 10, function()
+		toggle_windows:set({
+			label = {
+				string = is_show_windows and icons.chevron.left or icons.chevron.right,
+			},
+		})
+		for i, workspace in ipairs(workspaces) do
+			workspace:set({
+				icon = { padding_right = is_show_windows and 8 or 15 },
+				label = { width = is_show_windows and "dynamic" or 0 },
+			})
+		end
+	end)
 end)
