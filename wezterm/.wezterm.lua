@@ -5,7 +5,7 @@ local config = wezterm.config_builder()
 
 local theme = wezterm.plugin.require("https://github.com/neapsix/wezterm").main
 
-config.font = wezterm.font("FiraCode Nerd Font Mono")
+config.font = wezterm.font("JetBrainsMono Nerd Font")
 config.font_size = 18
 
 config.enable_tab_bar = false
