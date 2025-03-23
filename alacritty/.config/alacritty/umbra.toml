@@ -1,0 +1,89 @@
+# Umbra Theme for Alacritty
+# Based on the Umbra Theme Family Design Specification
+
+# Default colors
+[colors.primary]
+background = "#121218"  # Umbra - Base background
+foreground = "#e8e8e8"  # Corona - Primary text
+dim_foreground = "#909090"  # Halo - Secondary text
+bright_foreground = "#FFFFFF"  # Bright white
+
+# Cursor colors
+[colors.cursor]
+text = "#121218"    # Umbra - Base background
+cursor = "#e8e8e8"  # Corona - Primary text
+
+# Selection colors
+[colors.selection]
+text = "#121218"    # Umbra - Inverted for selection
+background = "#313142"  # Transit - High contrast highlight
+
+# Normal colors
+[colors.normal]
+black = "#121218"  # Umbra - Base background
+red = "#E65A5A"  # Aldebaran - Error red
+green = "#4CAF8F"  # Aurora - Primary green
+yellow = "#E4BF7F"  # Stellar - Primary gold
+blue = "#61B8D6"  # Nebula - Primary blue
+magenta = "#9D7CD8"  # Nova - Primary purple
+cyan = "#80C7DB"  # Helios - Info cyan
+white = "#909090"  # Halo - Secondary text
+
+# Bright colors
+[colors.bright]
+black = "#3B4B5F"  # Twilight - Muted text
+red = "#FF6B6B"  # Bright Aldebaran - Bright red
+green = "#56CFA7"  # Borealis - Bright green
+yellow = "#FFD494"  # Canopus - Bright yellow
+blue = "#75D4F0"  # Vega - Bright blue
+magenta = "#B794F6"  # Atlas - Bright magenta
+cyan = "#99E3F9"  # Bright Helios - Bright cyan
+white = "#FFFFFF"  # Bright white (brighter than Corona)
+
+# Dim colors
+[colors.dim]
+black = "#0d0d12"  # Darker background
+red = "#CC5151"  # Dimmed red
+green = "#3E8D73"  # Dimmed green
+yellow = "#BFA06A"  # Dimmed yellow
+blue = "#4F95AD"  # Dimmed blue
+magenta = "#8069B4"  # Dimmed magenta
+cyan = "#6AA1B3"  # Dimmed cyan
+white = "#6D7A8C"  # Astral - Subtle text
+
+# Search colors
+[colors.search.matches]
+foreground = "#121218"  # Umbra - Base background
+background = "#E6A2A2"  # Celaeno - Modified/search pink
+
+[colors.search.focused_match]
+foreground = "#121218"  # Umbra - Base background
+background = "#FF9C6A"  # Solar - Primary orange
+
+# Footer bar
+[colors.footer_bar]
+foreground = "#121218"  # Umbra - Base background
+background = "#4CAF8F"  # Aurora - Primary green
+
+# Hints
+[colors.hints.start]
+foreground = "#121218"  # Umbra - Base background
+background = "#B794E6"  # Io - Hint purple
+
+[colors.hints.end]
+foreground = "#121218"  # Umbra - Base background
+background = "#9D7CD8"  # Nova - Primary purple
+
+# Line indicator
+[colors.line_indicator]
+foreground = "None"
+background = "#1a1a23"  # Eclipse - Low highlight
+
+# Indexed Colors
+[[colors.indexed_colors]]
+index = 16
+color = "#FF9C6A"  # Solar - Primary orange
+
+[[colors.indexed_colors]]
+index = 17
+color = "#E6A2A2"
