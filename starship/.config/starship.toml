@@ -1,38 +1,58 @@
-
 format = """
-$username \
-$directory \
-$git_branch \
-$git_status \
-$fill \
-$c \
-$elixir \
-$elm \
-$golang \
-$nodejs \
-$rust \
-$python \
-$time\n \
-[󱞪](fg:iris) 
-"""
+$os\
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_state\
+$git_status\
+$cmd_duration\
+$line_break\
+$python\
+$nodejs\
+$rust\
+$golang\
+$character"""
 
-palette = "rose-pine"
+scan_timeout = 10
 
-[palettes.rose-pine]
-overlay = '#26233a'
-love = '#eb6f92'
-gold = '#f6c177'
-rose = '#ebbcba'
-pine = '#31748f'
-foam = '#9ccfd8'
-iris = '#c4a7e7'
+palette = "umbra"
+
+[palettes.umbra]
+aurora = "#4caf8f"
+nebula = "#61b8d6"
+nova = "#9d7cd8"
+solar = "#ff9c6a"
+stellar = "#e4bf7f"
+aldebaran = "#e65a5a"
+celaeno = "#e6a2a2"
+helios = "#80c7db"
+io = "#b794e6"
+corona = "#e8e8e8"
+halo = "#909090"
+twilight = "#3b4b5f"
+umbra = "#121218"
+
+[username]
+style_user = "bg:aurora fg:umbra"
+style_root = "bg:aldebaran fg:corona"
+format = "[ $user ]($style)"
+show_always = true
+
+[hostname]
+ssh_only = false
+format = "[ @$hostname ]($style)"
+trim_at = "."
+style = "bg:nebula fg:umbra"
+aliases = { "marcus-mbp" = "home" }
 
 [directory]
-format = '[](fg:overlay)[ $path ]($style)[](fg:overlay)'
-style = 'bg:overlay fg:pine'
+style = "bg:nova fg:umbra"
+format = "[ $path ]($style)"
 truncation_length = 3
 truncation_symbol = ".../"
 read_only = " 󰌾"
+read_only_style = "bg:nova fg:aldebaran"
 
 [directory.substitutions]
 Documents = '󰈙'
@@ -40,116 +60,66 @@ Downloads = ' '
 Music = ' '
 Pictures = ' '
 
-[fill]
-style = 'fg:overlay'
-symbol = ' '
-
 [git_branch]
-format = '[](fg:overlay)[ $symbol $branch ]($style)[](fg:overlay)'
-style = 'bg:overlay fg:foam'
-symbol = ''
+symbol = " "
+style = "bg:stellar fg:umbra"
+format="[ $symbol$branch ]($style)"
 
 [git_status]
-format = '[](fg:overlay)[$all_status$ahead_behind]($style)[](fg:overlay)'
-style = 'bg:overlay fg:love'
+style = "bg:twilight fg:corona"
+format = '([\[$all_status$ahead_behind\] ]($style))'
+conflicted = "=${count}"
+ahead = "⇡${count}"
+behind = "⇣${count}"
+diverged = "⇕⇡${ahead_count}⇣${behind_count}"
+untracked = "?${count}"
+stashed = "*${count}"
+modified = "!${count}"
+staged = "+${count}"
+renamed = "»${count}"
+deleted = "✘${count}"
 
-[time]
-format = "[](fg:overlay)[ $time 󰴈 ]($style)[](fg:overlay)"
-style = "bg:overlay fg:rose"
-time_format = "%I:%M%P"
-use_12hr = true
-disabled = false
+[git_state]
+style = "bg:solar fg:umbra"
+format= '\([$state( $progress_current/$progress_total)]($style)\)'
 
-[username]
-format = '[](fg:overlay)[ 󰧱 $user ]($style)[](fg:overlay)'
-show_always = true
-style_root = 'bg:overlay fg:iris'
-style_user = 'bg:overlay fg:iris'
+[cmd_duration]
+min_time = 500
+style = "bg:twilight fg:corona"
+format = '[ took $duration ]($style)'
 
-# Languages
-[aws]
-symbol = "  "
+[python]
+symbol = " "
+style = "bg:io fg:umbra"
+format = '[ $symbol${pyenv_prefix}(${version})(\($virtualenv\)) ]($style)'
 
-[buf]
-symbol = " "
+[nodejs]
+symbol = "󰎙 "
+style = "bg:aurora fg:umbra"
+format = '[ $symbol($version) ]($style)'
 
-[c]
-symbol = " "
-
-[conda]
-symbol = " "
-
-[crystal]
-symbol = " "
-
-[dart]
-symbol = " "
-
-[docker_context]
-symbol = " "
-
-[elixir]
-symbol = " "
-
-[elm]
-symbol = " "
-
-[fennel]
-symbol = " "
-
-[fossil_branch]
-symbol = " "
+[rust]
+symbol = "󱘗 "
+style = "bg:solar fg:umbra"
+format = '[ $symbol($version) ]($style)'
 
 [golang]
 symbol = " "
+style = "bg:nebula fg:umbra"
+format = '[ $symbol($version) ]($style)'
 
-[guix_shell]
-symbol = " "
+[character]
+success_symbol = "[❯](aurora)"
+error_symbol = "[❯](aldebaran)"
+vimcmd_symbol = "[❮](stellar)"
 
-[haskell]
-symbol = " "
-
-[haxe]
-symbol = " "
-
-[hg_branch]
-symbol = " "
-
-[hostname]
-ssh_symbol = " "
-
-[java]
-symbol = " "
-
-[julia]
-symbol = " "
-
-[kotlin]
-symbol = " "
-
-[lua]
-symbol = " "
-
-[memory_usage]
-symbol = "󰍛 "
-
-[meson]
-symbol = "󰔷 "
-
-[nim]
-symbol = "󰆥 "
-
-[nix_shell]
-symbol = " "
-
-[nodejs]
-style = "bg:overlay fg:pine"
-format = "[](fg:overlay)[$symbol$version]($style)[](fg:overlay) "
+[line_break]
 disabled = false
-symbol = "󰎙 "
 
-[ocaml]
-symbol = " "
+[os]
+format = "[ $symbol]($style)"
+style = "bg:celaeno fg:umbra"
+disabled = false
 
 [os.symbols]
 Alpaquita = " "
@@ -196,35 +166,3 @@ Unknown = " "
 Void = " "
 Windows = "󰍲 "
 
-[package]
-symbol = "󰏗 "
-
-[perl]
-symbol = " "
-
-[php]
-symbol = " "
-
-[pijul_channel]
-symbol = " "
-
-[python]
-symbol = " "
-
-[rlang]
-symbol = "󰟔 "
-
-[ruby]
-symbol = " "
-
-[rust]
-symbol = "󱘗 "
-
-[scala]
-symbol = " "
-
-[swift]
-symbol = " "
-
-[zig]
-symbol = " "
