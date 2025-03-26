@@ -28,6 +28,21 @@ return {
         prompt_prefix = " ",
         path_display = { "truncate" },
         selection_strategy = "reset",
+        sorting_strategy = "ascending",
+        layout_strategy = "horizontal",
+        layout_config = {
+          horizontal = {
+            prompt_position = "top",
+            preview_width = 0.55,
+            results_width = 0.8,
+          },
+          vertical = {
+            mirror = false,
+          },
+          width = 0.87,
+          height = 0.80,
+          preview_cutoff = 120,
+        },
 
         mappings = {
           i = {
@@ -39,6 +54,17 @@ return {
             ["<Up>"] = actions.move_selection_previous,
             ["<Down>"] = actions.move_selection_next,
             ["<CR>"] = actions.select_default,
+            ["<M-p>"] = action_layout.toggle_preview,
+            ["<C-/>"] = actions.which_key, -- List available keys
+            ["<C-_>"] = actions.which_key,
+          },
+          n = {
+            ["<esc>"] = actions.close,
+            ["<CR>"] = actions.select_default,
+            ["<C-x>"] = actions.select_horizontal,
+            ["<C-u>"] = actions.preview_scrolling_up,
+            ["<C-d>"] = actions.preview_scrolling_down,
+            ["?"] = actions.which_key,
             ["<M-p>"] = action_layout.toggle_preview,
           },
         },
@@ -150,6 +176,8 @@ return {
     nmap("<leader>gf", builtin.git_files, "Git files")
 
     -- Other useful pickers
+    nmap("<leader>fd", builtin.diagnostics, "Find diagnostics")
+    nmap("<leader>fk", builtin.treesitter, "Find treesitter symbols")
     nmap("<leader>fk", builtin.keymaps, "Find keymaps")
     nmap("<leader>fo", builtin.vim_options, "Find vim options")
     nmap("<leader>fc", builtin.commands, "Find commands")

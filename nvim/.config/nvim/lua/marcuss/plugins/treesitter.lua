@@ -5,7 +5,7 @@ return {
   dependencies = {
     "nvim-treesitter/nvim-treesitter-context",
     "windwp/nvim-ts-autotag",
-    "HiPhish/nvim-ts-rainbow2"
+    "virchau13/tree-sitter-astro",
   },
   config = function()
     vim.defer_fn(function()
@@ -29,6 +29,7 @@ return {
           "vim",
           "vimdoc",
           "yaml",
+          "astro",
         },
 
         -- Install parsers synchronously
@@ -44,7 +45,7 @@ return {
         highlight = {
           enable = true,
 
-          additional_vim_regex_highlighting = { "markdown" },
+          additional_vim_regex_highlighting = { "markdown", "astro" },
         },
 
         autotag = {
