@@ -1,56 +1,57 @@
 return {
   "nvim-treesitter/nvim-treesitter",
-  event = { "BufReadPre", "BufNewFile" },
   build = ":TSUpdate",
+  event = { "BufReadPost", "BufNewFile" },
   dependencies = {
+    "nvim-treesitter/nvim-treesitter-context",
     "windwp/nvim-ts-autotag",
+    "virchau13/tree-sitter-astro",
   },
   config = function()
-    local treesitter = require("nvim-treesitter.configs")
-
-    treesitter.setup({ -- enable syntax highlighting
-      highlight = {
-        enable = true,
-      },
-      -- enable indentation
-      indent = {
-        enable = true,
-      },
-      -- enable autotagging
-      autotag = {
-        enable = true,
-      },
-      -- ensure language parsers are installed
-      ensure_installed = {
-        "json",
-        "javascript",
-        "typescript",
-        "tsx",
-        "yaml",
-        "html",
-        "css",
-        "markdown",
-        "markdown_inline",
-        "svelte",
-        "bash",
-        "lua",
-        "vim",
-        "dockerfile",
-        "gitignore",
-        "vimdoc",
-        "jsdoc",
-        "c",
-      },
-      auto_install = true,
-      incremental_selection = {
-        enable = true,
-        keymaps = {
-          init_selection = "<C-space>",
-          node_incremental = "<C-space>",
-          scope_incremental = false,
-          node_decremental = "<bs>",
+    vim.defer_fn(function()
+      require("nvim-treesitter.configs").setup({
+        ensure_installed = {
+          "bash",
+          "c",
+          "cpp",
+          "css",
+          "html",
+          "javascript",
+          "json",
+          "lua",
+          "markdown",
+          "markdown_inline",
+          "python",
+          "regex",
+          "rust",
+          "tsx",
+          "typescript",
+          "vim",
+          "vimdoc",
+          "yaml",
+          "astro",
         },
-      },
-    })
+
+        -- Install parsers synchronously
+        sync_install = false,
+
+        -- Automatically install missing parsers
+        auto_install = true,
+
+        -- Indentation based on treesitter for the = operator
+        indent = { enable = true },
+
+        -- Enhanced syntax highlighting
+        highlight = {
+          enable = true,
+
+          additional_vim_regex_highlighting = { "markdown", "astro" },
+        },
+
+        autotag = {
+          enable = true,
+        },
+      })
+    end, 0)
   end,
 }
