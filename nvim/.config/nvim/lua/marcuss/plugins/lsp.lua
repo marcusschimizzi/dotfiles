@@ -97,7 +97,7 @@ return {
     })
 
     -- Setup null-ls for linting and formatting
-    local null_ls = require("none-ls")
+    local null_ls = require("null-ls")
 
     null_ls.setup({
       sources = {
@@ -373,13 +373,37 @@ return {
     -- Tailwind Css
     lspconfig.tailwindcss.setup({
       capabilities = capabilities,
-      filetypes = { "html", "astro", "javascriptreact", "typescriptreact", "mdx" },
+      filetypes = { "html", "astro", "javascriptreact", "typescriptreact", "mdx", "css", "less", "sass", "postcss" },
       init_options = {
         userLanguages = {
           astro = "html",
           mdx = "markdown",
         }
-      }
+      },
+      settings = {
+        tailwindCSS = {
+          validate = true,
+          lint = {
+            cssConflict = 'warning',
+            invalidApply = 'error',
+            invalidScreen = 'error',
+            invalidVariant = 'error',
+            invalidConfigPath = 'error',
+            invalidTailwindDirective = 'error',
+            recommendedVariantOrder = 'warning',
+          },
+          classAttributes = {
+            'class',
+            'className',
+            'class:list',
+            'classList',
+            'ngClass',
+          },
+          hovers = true,
+          suggestions = true,
+          colorDecorators = true,
+        }
+      },
     })
 
     -- JSON
