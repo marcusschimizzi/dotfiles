@@ -53,6 +53,7 @@ return {
         "onsails/lspkind.nvim", -- Icons in completion menu
       },
     },
+    "gbprod/none-ls-luacheck.nvim",
   },
   config = function()
     -- Setup neodev
@@ -120,7 +121,7 @@ return {
         -- Linters
         null_ls.builtins.diagnostics.eslint, -- JS, TS
         null_ls.builtins.diagnostics.flake8, -- Python
-        null_ls.builtins.diagnostics.luacheck, -- Lua
+        require("none-ls-luacheck.diagnostics.luacheck"),
 
         -- Code actions
         -- null_ls.builtins.code_actions.gitsigns,

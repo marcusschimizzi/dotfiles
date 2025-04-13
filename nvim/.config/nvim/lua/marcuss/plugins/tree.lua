@@ -65,9 +65,11 @@ return {
 
         vim.keymap.set('n', '?', api.tree.toggle_help, opts('Help'))
         vim.keymap.set('n', 'l', api.node.open.edit, opts('Open'))
+        vim.keymap.set('n', 'h', api.node.navigate.parent_close, opts('Close directory'))
+        vim.keymap.set('n', 'gh', api.tree.toggle_hidden_filter, opts('Toggle hidden files'))
       end,
     })
 
-    vim.keymap.set('n', '<leader>e', ':NvimTreeToggle<CR>', { desc = "Toggle file explorer", silent = true })
+    vim.keymap.set('n', '<leader>ee', ':NvimTreeToggle<CR>', { desc = "Toggle file explorer", silent = true })
   end
 }

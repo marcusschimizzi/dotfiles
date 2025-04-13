@@ -47,7 +47,6 @@ return {
         return {"treesitter", "indent"}
       end,
       open_fold_hl_timeout = 150,
-      close_fold_kinds = {"imports", "comment"},
       preview = {
         win_config = {
           border = {"", "─", "", "", "", "─", "", ""},
@@ -66,7 +65,6 @@ return {
     -- Fold keymaps
     vim.keymap.set("n", "zR", require("ufo").openAllFolds, { desc = "Open all folds" })
     vim.keymap.set("n", "zM", require("ufo").closeAllFolds, { desc = "Close all folds" })
-    -- vim.keymap.set("n", "zr", require("ufo").openFoldsExceptKinds, { desc = "Open folds except kinds" })
     vim.keymap.set("n", "K", function()
       local winid = require("ufo").peekFoldedLinesUnderCursor()
       if not winid then

@@ -1,5 +1,6 @@
 return {
   "nvim-lua/plenary.nvim",
+  "christoomey/vim-tmux-navigator",
   { "b0o/SchemaStore.nvim" },
   {
     "nvim-tree/nvim-web-devicons",

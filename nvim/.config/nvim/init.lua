@@ -1,5 +1,3 @@
--- init.lua - Minimal Neovim Configuration
---
 -- Author: Marcus Schimizzi
 -- Created: 03/24/25
 
