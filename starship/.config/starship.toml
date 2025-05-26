@@ -6,6 +6,7 @@ $directory\
 $git_branch\
 $git_state\
 $git_status\
+$fill\
 $cmd_duration\
 $line_break\
 $python\
@@ -46,6 +47,9 @@ trim_at = "."
 style = "bg:nebula fg:umbra"
 aliases = { "marcus-mbp" = "home" }
 
+[fill]
+symbol = " "
+
 [directory]
 style = "bg:nova fg:umbra"
 format = "[ $path ]($style)"
@@ -62,12 +66,12 @@ Pictures = ' '
 
 [git_branch]
 symbol = " "
-style = "bg:stellar fg:umbra"
+style = "bg:solar fg:umbra"
 format="[ $symbol$branch ]($style)"
 
 [git_status]
-style = "bg:twilight fg:corona"
-format = '([\[$all_status$ahead_behind\] ]($style))'
+style = "bg:stellar fg:umbra"
+format = '([ \[$all_status$ahead_behind\] ]($style))'
 conflicted = "=${count}"
 ahead = "⇡${count}"
 behind = "⇣${count}"
@@ -80,12 +84,12 @@ renamed = "»${count}"
 deleted = "✘${count}"
 
 [git_state]
-style = "bg:solar fg:umbra"
+style = "bg:twilight fg:corona"
 format= '\([$state( $progress_current/$progress_total)]($style)\)'
 
 [cmd_duration]
 min_time = 500
-style = "bg:twilight fg:corona"
+style = "fg:twilight bg:corona"
 format = '[ took $duration ]($style)'
 
 [python]

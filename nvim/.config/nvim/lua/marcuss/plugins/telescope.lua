@@ -3,37 +3,189 @@ return {
   branch = "0.1.x",
   dependencies = {
     "nvim-lua/plenary.nvim",
-    { "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+    {
+      "nvim-telescope/telescope-fzf-native.nvim",
+      build = "make",
+      cond = function()
+        return vim.fn.executable("make") == 1
+      end,
+    },
+    "nvim-telescope/telescope-file-browser.nvim",
+    "nvim-telescope/telescope-ui-select.nvim",
     "nvim-tree/nvim-web-devicons",
-    "folke/todo-comments.nvim"
   },
   config = function()
+    -- Import telescope module
     local telescope = require("telescope")
     local actions = require("telescope.actions")
+    local action_layout = require("telescope.actions.layout")
+    local builtin = require("telescope.builtin")
 
+    -- Configure telescope
     telescope.setup({
       defaults = {
-        path_display = { "smart" },
+        -- Default settings for all pickers
+        prompt_prefix = " ",
+        path_display = { "truncate" },
+        selection_strategy = "reset",
+        sorting_strategy = "ascending",
+        layout_strategy = "horizontal",
+        layout_config = {
+          horizontal = {
+            prompt_position = "top",
+            preview_width = 0.55,
+            results_width = 0.8,
+          },
+          vertical = {
+            mirror = false,
+          },
+          width = 0.87,
+          height = 0.80,
+          preview_cutoff = 120,
+        },
+
         mappings = {
           i = {
-            ["<C-k>"] = actions.move_selection_previous, -- move to prev result
-            ["<C-j>"] = actions.move_selection_next, -- move to next result
-            ["<C-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
+            ["<C-p>"] = actions.cycle_history_prev,
+            ["<C-n>"] = actions.cycle_history_next,
+            ["<C-k>"] = actions.move_selection_previous,
+            ["<C-j>"] = actions.move_selection_next,
+            ["<C-c>"] = actions.close,
+            ["<Up>"] = actions.move_selection_previous,
+            ["<Down>"] = actions.move_selection_next,
+            ["<CR>"] = actions.select_default,
+            ["<M-p>"] = action_layout.toggle_preview,
+            ["<C-/>"] = actions.which_key, -- List available keys
+            ["<C-_>"] = actions.which_key,
           },
+          n = {
+            ["<esc>"] = actions.close,
+            ["<CR>"] = actions.select_default,
+            ["<C-x>"] = actions.select_horizontal,
+            ["<C-u>"] = actions.preview_scrolling_up,
+            ["<C-d>"] = actions.preview_scrolling_down,
+            ["?"] = actions.which_key,
+            ["<M-p>"] = action_layout.toggle_preview,
+          },
+        },
+
+        vimgrep_arguments = {
+          "rg",
+          "--color=never",
+          "--no-heading",
+          "--with-filename",
+          "--line-number",
+          "--column",
+          "--smart-case",
+          "--hidden",
+          "--glob=!.git/",
+        },
+        file_ignore_patterns = {
+          "node_modules",
+          "%.git/",
+          "%.DS_Store",
+          "%.settings/",
+          "target/",
+          "build/",
+          "dist/",
+          "%.class",
+          "%.o",
+          "%.meta",
+        },
+        set_env = { ["COLORTERM"] = "truecolor" }, -- Enable colors
+        file_previewer = require("telescope.previewers").vim_buffer_cat.new,
+        grep_previewer = require("telescope.previewers").vim_buffer_vimgrep.new,
+        qflist_previewer = require("telescope.previewers").vim_buffer_qflist.new,
+        buffer_previewer_maker = require("telescope.previewers").buffer_previewer_maker,
+      },
+
+      -- Configure individual pickers
+      pickers = {
+        find_files = {
+          hidden = true,
+          find_command = { "rg", "--files", "--hidden", "--glob", "!**/.git/*" },
+        },
+        live_grep = {
+          additional_args = function(opts)
+            return { "--hidden" }
+          end
+        },
+        buffers = {
+          show_all_buffers = true,
+          sort_lastused = true,
+          mappings = {
+            i = {
+              ["<c-d>"] = actions.delete_buffer,
+            },
+            n = {
+              ["dd"] = actions.delete_buffer,
+            },
+          },
+        },
+        git_files = {
+          hidden = true,
+          show_untracked = true,
+        },
+        colorscheme = {
+          enable_preview = true,
+        },
+      },
+
+      -- Configure extensions
+      extensions = {
+        fzf = {
+          fuzzy = true,
+          override_generic_sorter = true,
+          override_file_sorter = true,
+          case_mode = "smart_case",
+        },
+        file_browser = {
+          hijack_netrw = true,
+        },
+        ["ui-select"] = {
+          require("telescope.themes").get_dropdown({}),
         },
       },
     })
 
+    -- load extensions
     telescope.load_extension("fzf")
+    telescope.load_extension("file_browser")
+    telescope.load_extension("ui-select")
 
-    -- set keymaps
-    local keymap = vim.keymap -- for conciseness
+    -- Key mappings
+    local nmap = function(keys, func, desc)
+      vim.keymap.set("n", keys, func, { desc = desc })
+    end
 
-    keymap.set("n", "<leader>ff", "<cmd>Telescope find_files<cr>", { desc = "Fuzzy find files in cwd" })
-    keymap.set("n", "<leader>fr", "<cmd>Telescope oldfiles<cr>", { desc = "Fuzzy find recent files" })
-    keymap.set("n", "<C-p>", "<cmd>Telescope git_files<cr>", { desc = "Fuzzy find git files" })
-    keymap.set("n", "<leader>fs", "<cmd>Telescope live_grep<cr>", { desc = "Find string in cwd" })
-    keymap.set("n", "<leader>fc", "<cmd>Telescope grep_string<cr>", { desc = "Find string under cursor in cwd" })
-    keymap.set("n", "<leader>ft", "<cmd>TodoTelescope<cr>", { desc = "Find todos" })
+    -- File navigation
+    nmap("<leader>ff", builtin.find_files, "Find files")
+    nmap("<leader>fr", builtin.oldfiles, "Find recent files")
+    nmap("<leader>fb", builtin.buffers, "Find buffers")
+    nmap("<leader>fg", builtin.live_grep, "Find via grep")
+    nmap("<leader>fh", builtin.help_tags, "Find help")
+    nmap("<leader>f/", builtin.current_buffer_fuzzy_find, "Find in current buffer")
+    nmap("<leader>fs", builtin.lsp_document_symbols, "Find document symbols")
+    nmap("<leader>fS", builtin.lsp_dynamic_workspace_symbols, "Find workspace symbols")
+    nmap("<leader>fm", builtin.marks, "Find marks")
+
+    -- Git integration
+    nmap("<leader>gc", builtin.git_commits, "Git commits")
+    nmap("<leader>gb", builtin.git_branches, "Git branches")
+    nmap("<leader>gs", builtin.git_status, "Git status")
+    nmap("<leader>gf", builtin.git_files, "Git files")
+
+    -- Other useful pickers
+    nmap("<leader>fd", builtin.diagnostics, "Find diagnostics")
+    nmap("<leader>fk", builtin.treesitter, "Find treesitter symbols")
+    nmap("<leader>fk", builtin.keymaps, "Find keymaps")
+    nmap("<leader>fo", builtin.vim_options, "Find vim options")
+    nmap("<leader>fc", builtin.commands, "Find commands")
+
+    -- File browser
+    nmap("<leader>fe", telescope.extensions.file_browser.file_browser, "File browser")
+
+    -- Use telescope for vim.ui.select
+    vim.ui.select = require("telescope.themes").get_dropdown()
   end,
 }

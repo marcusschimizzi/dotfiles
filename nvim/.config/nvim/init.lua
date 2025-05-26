@@ -1,2 +1,9 @@
-require("marcuss.core")
-require("marcuss.lazy_init")
+-- Author: Marcus Schimizzi
+-- Created: 03/24/25
+
+-- Load core configurations
+require("marcuss.options")
+require("marcuss.keymaps")
+require("marcuss.lazy")
+require("marcuss.plugins")
+require("marcuss.autocmds")

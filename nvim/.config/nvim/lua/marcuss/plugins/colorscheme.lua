@@ -1,21 +1,12 @@
 return {
-	{
-		"folke/tokyonight.nvim",
-		priority = 1000, -- load this before all other start plugins
-		config = function()
-			local transparent = true
+  "marcusschimizzi/umbra.nvim",
+  name = "umbra",
+  lazy = false,
+  priority = 1000,
+  opts = {},
+  config = function()
+    require("umbra").setup()
 
-			require("tokyonight").setup({
-				style = "night",
-				transparent = transparent,
-				styles = {
-					sidebars = transparent and "transparent" or "dark",
-					floats = transparent and "transparent" or "dark",
-				},
-			})
-
-			-- load the colorscheme
-			vim.cmd("colorscheme tokyonight")
-		end,
-	},
+    vim.cmd.colorscheme("umbra")
+  end
 }
