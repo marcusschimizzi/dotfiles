@@ -1,0 +1,123 @@
+configuration {
+  modi: "drun,run,window,ssh";
+  show-icons: true;
+  terminal: "ghostty";
+  drun-display-format: "{name} [<span style='italic' size='small'>({generic})</span>]";
+  location: 0;
+  disable-history: false;
+  hide-scrollbar: true;
+  display-drun: " Apps ";
+  display-run: " Run ";
+  display-window: " Window";
+  display-Network: " Network";
+  sidebar-mode: true;
+
+  kb-cancel: "Escape,Control+g,Control+bracketleft";
+  kb-accept-entry: "Control+m,Return,KP_Enter";
+  kb-remove-to-eol: "Control+k";
+  kb-mode-next: "Shift+Right,Control+Tab";
+  kb-move-previous: "Shift+Left,Control+ISO_Left_Tab";
+  kb-row-up: "Up,Control+p";
+  kb-row-down: "Down,Control+n";
+}
+
+
+* {
+    /* Margins and paddings */
+    margin: 0;
+    padding: 0;
+    spacing: 0;
+}
+
+window {
+  border: 2px;
+  border-radius: 12px;
+  width: 600px;
+  location: center;
+  anchor: center;
+  transparency: "real";
+}
+
+mainbox {
+  background-color: transparent;
+  children: [ "inputbar", "message", "mode-switcher", "listview" ];
+  spacing: 8px;
+  padding: 16px;
+}
+
+inputbar {
+  border-radius: 8px;
+  padding: 12px 16px;
+  children: [ "prompt", "textbox-prompt-colon", "entry" ];
+}
+
+textbox-prompt-colon {
+  expand: false;
+  str: ":";
+  margin: 0 8px 0 0;
+}
+
+entry {
+  placeholder: "Type to search...";
+  blink: true;
+  cursor: text;
+}
+
+message {
+  border-radius: 8px;
+  padding: 8px 12px;
+  margin: 0;
+}
+
+mode-switcher {
+  spacing: 8px;
+}
+
+button {
+    border-radius: 6px;
+    padding: 8px 16px;
+    horizontal-align: 0.5;
+}
+
+listview {
+    columns: 1;
+    lines: 8;
+    cycle: false;
+    dynamic: true;
+    scrollbar: false;
+    layout: vertical;
+    reverse: false;
+    fixed-height: true;
+    fixed-columns: true;
+    spacing: 4px;
+    margin: 8px 0 0 0;
+}
+
+element {
+    orientation: horizontal;
+    border-radius: 6px;
+    padding: 8px 12px;
+    spacing: 12px;
+}
+
+element-icon {
+    size: 24px;
+    cursor: inherit;
+}
+
+element-text {
+    cursor: inherit;
+    vertical-align: 0.5;
+}
+
+/* Scrollbar (hidden but keeping for future use) */
+scrollbar {
+    width: 4px;
+    border: 0;
+    handle-width: 4px;
+    padding: 0;
+    margin: 0 4px 0 0;
+}
+
+@theme "umbra"
+
